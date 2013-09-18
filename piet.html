@@ -1,0 +1,302 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<title>DM's Esoteric Programming Languages - Piet</title>
+<link rel="stylesheet" type="text/css" href="piet_files/style.css">
+</head>
+<body>
+<table align="right" border="0" cellpadding="10" cellspacing="0">
+<tbody><tr><td>
+<script type="text/javascript"><!--
+google_ad_client = "pub-0030169375710413";
+google_ad_width = 160;
+google_ad_height = 600;
+google_ad_format = "160x600_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "B0E0E6";
+google_color_bg = "FFFFFF";
+google_color_link = "000000";
+google_color_url = "336699";
+google_color_text = "333333";
+//--></script>
+<script type="text/javascript" src="piet_files/show_ads.js">
+</script>
+</td></tr>
+</tbody></table>
+
+<h1>Piet</h1>
+<hr>
+
+<table align="right" border="1" cellpadding="5" cellspacing="0">
+<tbody><tr><td>
+<img src="piet_files/Mondrian.jpg" alt="Composition with Red, Yellow and Blue by Piet Mondrian" height="168" width="158"><br>
+<i>Composition with Red,<br>Yellow and Blue</i>.<br>1921, Piet Mondrian.
+</td></tr>
+</tbody></table>
+<h2>Introduction</h2>
+Piet is a programming language in which programs look like abstract paintings. The language is named after
+<a href="http://www.ibiblio.org/wm/paint/auth/mondrian/">Piet Mondrian</a>, who pioneered the field of geometric abstract
+art. I would have liked to call the language Mondrian, but
+<a href="http://www.mondrian-script.org/mondrian/index.html">someone beat me to it</a> with a rather mundane-looking
+scripting language. Oh well, we can't all be esoteric language writers I suppose.
+
+<h2>Design Principles</h2>
+<ul>
+<li>Program code will be in the form of abstract art.
+</li></ul>
+
+<h2>Language Concepts</h2>
+<h3>Colours</h3>
+<table align="right" border="1" cellpadding="3" cellspacing="0">
+	<tbody><tr>
+		<td align="center" bgcolor="#FFC0C0">#FFC0C0<br>light red</td>
+		<td align="center" bgcolor="#FFFFC0">#FFFFC0<br>light yellow</td>
+		<td align="center" bgcolor="#C0FFC0">#C0FFC0<br>light green</td>
+		<td align="center" bgcolor="#C0FFFF">#C0FFFF<br>light cyan</td>
+		<td align="center" bgcolor="#C0C0FF">#C0C0FF<br>light blue</td>
+		<td align="center" bgcolor="#FFC0FF">#FFC0FF<br>light magenta</td>
+	</tr>
+	<tr>
+		<td align="center" bgcolor="#FF0000">#FF0000<br>red</td>
+		<td align="center" bgcolor="#FFFF00">#FFFF00<br>yellow</td>
+		<td align="center" bgcolor="#00FF00">#00FF00<br>green</td>
+		<td align="center" bgcolor="#00FFFF">#00FFFF<br>cyan</td>
+		<td align="center" bgcolor="#0000FF">#0000FF<br>blue</td>
+		<td align="center" bgcolor="#FF00FF">#FF00FF<br>magenta</td>
+	</tr>
+	<tr>
+		<td align="center" bgcolor="#C00000">#C00000<br>dark red</td>
+		<td align="center" bgcolor="#C0C000">#C0C000<br>dark yellow</td>
+		<td align="center" bgcolor="#00C000">#00C000<br>dark green</td>
+		<td align="center" bgcolor="#00C0C0">#00C0C0<br>dark cyan</td>
+		<td align="center" bgcolor="#0000C0">#0000C0<br>dark blue</td>
+		<td align="center" bgcolor="#C000C0">#C000C0<br>dark magenta</td>
+	</tr>
+	<tr>
+		<td colspan="3" align="center" bgcolor="#FFFFFF">#FFFFFF&nbsp;white</td>
+		<td colspan="3" align="center" bgcolor="#000000"><font color="#FFFFFF">#000000&nbsp;black</font></td>
+	</tr>
+</tbody></table>
+Piet uses 20 distinct colours, as shown in the table at right.
+The 18 colours in the first 3 rows of the table are related cyclically in the following two ways:
+<ul>
+<li><b>Hue Cycle:</b> red -&gt; yellow -&gt; green -&gt; cyan -&gt; blue -&gt; magenta -&gt; red
+</li><li><b>Lightness Cycle:</b> light -&gt; normal -&gt; dark -&gt; light
+</li></ul>
+Note that "light" is considered to be one step "darker" than "dark", and vice versa. White and black do not fall into
+either cycle.
+<p>
+Additional colours (such as orange, brown) may be used, though their effect is implementation-dependent. In the simplest
+case, non-standard colours are treated by the language interpreter as the same as white, so may be used freely wherever
+white is used. (Another possibility is that they are treated the same as black.)
+
+</p><h3>Codels</h3>
+Piet code takes the form of graphics made up of the recognised colours. Individual pixels of colour are significant in the
+language, so it is common for programs to be enlarged for viewing so that the details are easily visible. In such enlarged
+programs, the term "codel" is used to mean a block of colour equivalent to a single pixel of code, to avoid confusion with
+the actual pixels of the enlarged graphic, of which many may make up one codel.
+
+<h3>Colour Blocks</h3>
+The basic unit of Piet code is the colour block. A colour block is a contiguous block of any number of codels of one colour,
+bounded by blocks of other colours or by the edge of the program graphic. Blocks of colour adjacent only diagonally are not
+considered contiguous. A colour block may be any shape and may have "holes" of other colours inside it, which are not considered
+part of the block.
+
+<h3>Stack</h3>
+Piet uses a stack for storage of all data values. Data values exist only as integers, though they may be read in or
+printed as Unicode character values with appropriate commands.
+
+<h3>Program Execution</h3>
+<table align="right" border="1" cellpadding="3" cellspacing="0">
+	<tbody><tr>
+		<th>DP</th><th>CC</th><th>Codel chosen</th>
+	</tr>
+	<tr>
+		<td rowspan="2">right</td><td>left</td><td>uppermost</td>
+	</tr>
+	<tr>
+		<td>right</td><td>lowermost</td>
+	</tr>
+	<tr>
+		<td rowspan="2">down</td><td>left</td><td>rightmost</td>
+	</tr>
+	<tr>
+		<td>right</td><td>leftmost</td>
+	</tr>
+	<tr>
+		<td rowspan="2">left</td><td>left</td><td>lowermost</td>
+	</tr>
+	<tr>
+		<td>right</td><td>uppermost</td>
+	</tr>
+	<tr>
+		<td rowspan="2">up</td><td>left</td><td>leftmost</td>
+	</tr>
+	<tr>
+		<td>right</td><td>rightmost</td>
+	</tr>
+</tbody></table>
+The Piet language interpreter begins executing a program in the colour block which includes the upper left codel of the program.
+The interpreter maintains a <em>Direction Pointer</em> (DP), initially pointing to the right. The DP may point either right,
+left, down or up. The interpreter also maintains a <em>Codel Chooser</em> (CC), initially pointing left. The CC may point
+either left or right. The directions of the DP and CC will often change during program execution.
+<p>
+As it executes the program, the interpreter traverses the colour blocks of the program under the following rules:
+</p><ol>
+<li>The interpreter finds the edge of the current colour block which is furthest in the direction of the DP. (This edge may
+be disjoint if the block is of a complex shape.)
+</li><li>The interpreter finds the codel of the current colour block on that edge which is furthest to the CC's direction of the DP's
+direction of travel. (Visualise this as standing on the program and walking in the direction of the DP; see table at right.) 
+</li><li>The interpreter travels from that codel into the colour block containing the codel immediately in the direction of the DP.
+</li></ol>
+The interpreter continues doing this until the program terminates.
+
+<h2>Syntax Elements</h2>
+<h3>Numbers</h3>
+Each non-black, non-white colour block in a Piet program represents an integer equal to the number of codels in that block.
+Note that non-positive integers cannot be represented, although they can be constructed with operators. When the interpreter
+encounters a number, it does not necessarily do anything with it. In particular, it is not automatically pushed on to the
+stack - there is an explicit command for that (see below).
+
+<h3>Black Blocks and Edges</h3>
+Black colour blocks and the edges of the program restrict program flow. 
+If the Piet interpreter attempts to move into a black block
+or off an edge, it is stopped and the CC is toggled. The interpreter 
+then attempts to move from its current block again. If it fails
+a second time, the DP is moved clockwise one step. These attempts are 
+repeated, with the CC and DP being changed between alternate
+attempts. If after eight attempts the interpreter cannot leave its 
+current colour block, there is no way out and the program terminates.
+
+<h3>White Blocks</h3>
+White colour blocks are "free" zones through which the interpreter 
+passes unhindered. If it moves from a colour block into a white
+area, the interpreter "slides" through the white codels in the direction
+ of the DP until it reaches a non-white colour block.
+If the interpreter slides into a black block or an edge, it is 
+considered restricted (see above), otherwise it moves into the
+colour block so encountered. Sliding across white blocks into a new 
+colour does not cause a command to be executed (see below). In this way,
+white blocks can be used to change the current colour without executing a
+ command, which is very useful for coding loops.
+<p>
+<i>Clarification of white block behaviour (added 25 January, 2008)</i>:
+</p><p>
+Sliding across white blocks takes the interpreter in a <i>straight line</i> until it hits a coloured pixel or edge. It does not use the procedure
+described above for determining where the interpreter emerges from non-white coloured blocks.
+</p><p>
+Precisely what happens when the interpeter slides across a white block 
+and hits a black block or an edge was not clear with the original
+specification. My interpretation follows from a literal reading of the 
+above text:
+</p><ul>
+<li>The interpreter "slides" across the white block in a straight line.
+</li><li>If it hits a restriction, the CC is toggled. Since this results
+ in no difference in where the interpreter is trying to go, the DP is
+immediately stepped clockwise.
+</li><li>The interpreter now begins sliding from its current white 
+codel, in the new direction of the DP, until it either enters a coloured
+ block or
+encounters another restriction.
+</li><li>Each time the interpreter hits a restriction while within the 
+white block, it toggles the CC and steps the DP clockwise, then tries to
+ slide
+again. This process repeats until the interpreter either enters a 
+coloured block (where execution then continues); or until the 
+interpreter
+begins retracing its route. If it retraces its route entirely within a 
+white block, there is no way out of the white block and execution should
+ terminate.
+</li></ul>
+
+<h3>Commands</h3>
+<table align="right" border="1" cellpadding="3" cellspacing="0">
+	<tbody><tr>
+		<th>&nbsp;</th><th colspan="3">Lightness change</th>
+	</tr>
+	<tr>
+		<th>Hue change</th><th>None</th><th>1 Darker</th><th>2 Darker</th>
+	</tr>
+	<tr>
+		<th>None</th><td>&nbsp;</td><td>push</td><td>pop</td>
+	</tr>
+	<tr>
+		<th>1 Step</th><td>add</td><td>subtract</td><td>multiply</td>
+	</tr>
+	<tr>
+		<th>2 Steps</th><td>divide</td><td>mod</td><td>not</td>
+	</tr>
+	<tr>
+		<th>3 Steps</th><td>greater</td><td>pointer</td><td>switch</td>
+	</tr>
+	<tr>
+		<th>4 Steps</th><td>duplicate</td><td>roll</td><td>in(number)</td>
+	</tr>
+	<tr>
+		<th>5 Steps</th><td>in(char)</td><td>out(number)</td><td>out(char)</td>
+	</tr>
+</tbody></table>
+Commands are defined by the transition of colour from one colour block to the next as the interpreter travels through the
+program. The number of steps along the Hue Cycle and Lightness Cycle in each transition determine the command executed, as shown
+in the table at right. If the transition between colour blocks occurs via a slide across a white block, no command is executed.
+The individual commands are explained below.
+<ul>
+<li><b>push:</b> Pushes the value of the colour block just exited on to the stack. Note that values of colour blocks are
+not automatically pushed on to the stack - this push operation must be explicitly carried out.
+</li><li><b>pop:</b> Pops the top value off the stack and discards it.
+</li><li><b>add:</b> Pops the top two values off the stack, adds them, and pushes the result back on the stack.
+</li><li><b>subtract:</b> Pops the top two values off the stack, subtracts the top value from the second top value,
+and pushes the result back on the stack.
+</li><li><b>multiply:</b> Pops the top two values off the stack, multiplies them, and pushes the result back on the stack.
+</li><li><b>divide:</b> Pops the top two values off the stack, calculates the integer division of the second top value by the
+top value, and pushes the result back on the stack.
+</li><li><b>mod:</b> Pops the top two values off the stack, calculates the second top value modulo the top value,
+and pushes the result back on the stack.
+</li><li><b>not:</b> Replaces the top value of the stack with 0 if it is non-zero, and 1 if it is zero.
+</li><li><b>greater:</b> Pops the top two values off the stack, and pushes 1 on to the stack if the second top value is
+greater than the top value, and pushes 0 if it is not greater.
+</li><li><b>pointer:</b> Pops the top value off the stack and rotates the DP clockwise that many steps (anticlockwise if negative).
+</li><li><b>switch:</b> Pops the top value off the stack and toggles the CC that many times.
+</li><li><b>duplicate:</b> Pushes a copy of the top value on the stack on to the stack.
+</li><li><b>roll:</b> Pops the top two values off the stack and "rolls" the remaining stack entries to a depth equal to the
+second value popped, by a number of rolls equal to the first value popped. A single roll to depth <i>n</i> is defined as burying the
+top value on the stack <i>n</i> deep and bringing all values above it up by 1 place. A negative number of rolls rolls in the opposite
+direction. A negative depth is an error and the command is ignored.
+</li><li><b>in:</b> Reads a value from STDIN as either a number or character, depending
+on the particular incarnation of this command and pushes it on to the stack.
+</li><li><b>out:</b> Pops the top value off the stack and prints it to STDOUT as either a number or character, depending
+on the particular incarnation of this command.
+</li></ul>
+Any operations which cannot be performed (such as popping values when not enough are on the stack) are simply ignored.
+
+<h2>Sample Programs and Resources</h2>
+<ul>
+<li><a href="http://www.dangermouse.net/esoteric/piet/samples.html">Sample programs</a>
+</li><li><a href="http://www.dangermouse.net/esoteric/piet/tools.html">Third-party Piet interpreters and development tools</a>
+</li></ul>
+<p>
+<script type="text/javascript"><!--
+google_ad_client = "pub-0030169375710413";
+google_ad_width = 728;
+google_ad_height = 15;
+google_ad_format = "728x15_0ads_al_s";
+google_ad_channel ="";
+google_color_border = "B0E0E6";
+google_color_bg = "FFFFFF";
+google_color_link = "000000";
+google_color_url = "336699";
+google_color_text = "333333";
+//--></script>
+<script type="text/javascript" src="piet_files/show_ads.js">
+</script>
+</p><hr>
+<a href="http://www.dangermouse.net/">Home</a> | <a href="http://www.dangermouse.net/esoteric/">Esoteric Programming Languages</a><br>
+
+<i>Last updated: Friday, 25 January, 2008; 02:48:17 PST.</i><br>
+Copyright © 1990-2013, David Morgan-Mar. <i>dmm@dangermouse.net</i><br>
+<i>Hosted by: <a href="http://www.dreamhost.com/rewards.cgi?dmmaus">DreamHost</a></i>
+
+
+
+
+</body></html>
