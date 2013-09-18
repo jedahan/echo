@@ -9,6 +9,9 @@ The only way I have been able to run Piet so far is in the browser, [here](http:
 
 Make sure to load the small image, or the large one with a Codel width of 10.
 
+Unlike my normal git workflow, I have decided to keep work in progress images separated
+so that people can quickly see how it was built up.
+
 Notes:
 The program is greedy, and asks for all input in an infinite loop (which I accidentally made, its feature now!). So let's say I want it to exit when the stack is empty, how can I do that? Well, lets say it tries to chomp a '.', heres how I will check for a period and branch if its there:
 
@@ -19,3 +22,5 @@ push    # push a '.'
 sub     # subtract '.' from the newest input, push result on stack
 not     # if result is anything but 0, push a 1, otherwise keep it as 0
 pointer # rotate the direction pointer by 0 or 1
+
+This is implemented in composition 03.
